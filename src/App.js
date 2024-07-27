@@ -7,11 +7,17 @@ const initialItems = [
 ];
 
 export default function App() {
+  const [items, setItems] = useState([]);
+
+  function handleAddItems(item) {
+    setItems((items) => [...items, item]);
+  }
+
   return (
     <div className="app">
       <Logo />
-      <Form />
-      <PackingList />
+      <Form onAddItems={handleAddItems} />
+      <PackingList items={items} />
       <Stats />
     </div>
   );
@@ -20,7 +26,7 @@ export default function App() {
 function Logo() {
   return <h1> 🌴 Far Away 💼</h1>;
 }
-function Form() {
+function Form({ onAddItems }) {
   //COntrol element technique - Create a piece of state
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(1);
@@ -37,6 +43,7 @@ function Form() {
       id: Date.now(),
     };
     console.log(newItem);
+    onAddItems(newItem);
 
     setDescription("");
     setQuantity(1);
@@ -68,11 +75,11 @@ function Form() {
     </form>
   );
 }
-function PackingList() {
+function PackingList({ items }) {
   return (
     <div className="list">
       <ul>
-        {initialItems.map((items) => (
+        {items.map((items) => (
           <Item items={items} key={items.id} />
         ))}
       </ul>
